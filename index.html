@@ -6,15 +6,15 @@
     <title>承緯 & 書念's Wedding Photo Booth</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Noto+Serif+TC:wght@300;400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Noto+Serif+TC:wght@300;400;500&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --primary-color: #ba7a8c;     /* 莫蘭迪優雅粉 */
-            --text-main: #5a4f48;         /* 溫暖的手繪深棕色（配合插畫風格） */
-            --bg-color: #fcf9f5;          /* 質感溫潤的燕麥奶色 */
+            --primary-color: #e04d75;     /* 配合手繪外框的活力桃粉 */
+            --text-main: #5a3a24;         /* 配合手繪插畫的深褐咖啡色 */
+            --bg-color: #f7f4eb;          /* 完全提取插畫的溫暖米色底 */
             --card-bg: #ffffff;
-            --accent-light: #f5ece5;
+            --accent-light: #fbf9f5;
         }
 
         * {
@@ -26,7 +26,7 @@
             font-family: 'Cormorant Garamond', 'Noto Serif TC', serif;
             background-color: var(--bg-color);
             margin: 0;
-            padding: 30px 20px;
+            padding: 40px 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -38,16 +38,16 @@
         /* 標頭與婚禮文字設計 */
         header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
             max-width: 420px;
             width: 100%;
         }
 
         .wedding-names {
-            font-size: 1.6rem;
-            font-weight: 400;
+            font-size: 1.8rem;
+            font-weight: 500;
             color: var(--text-main);
-            margin: 0 0 15px 0;
+            margin: 0 0 25px 0;
             letter-spacing: 0.15em;
         }
         
@@ -57,40 +57,43 @@
             margin: 0 8px;
         }
 
-        /* 經文與小花風格區塊 */
+        /* 網頁上方的經文手繪感排版 */
         .verse-container {
-            background-color: rgba(255, 255, 255, 0.7);
-            border-radius: 4px;
-            padding: 16px;
-            margin-bottom: 25px;
-            border: 1px solid #ebdcd0;
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(90, 58, 36, 0.05);
+            border: 1px solid #eee2d5;
+            text-align: left;
             position: relative;
         }
 
         .verse-zh {
-            font-size: 0.95rem;
-            line-height: 1.6;
-            margin: 0 0 10px 0;
-            font-weight: 400;
-            color: #6e5f56;
+            font-size: 1rem;
+            line-height: 1.7;
+            margin: 0 0 14px 0;
+            font-weight: 500;
+            color: var(--text-main);
             letter-spacing: 0.08em;
         }
 
         .verse-en {
             font-family: 'Cormorant Garamond', serif;
-            font-size: 1rem;
+            font-size: 1.1rem;
             line-height: 1.4;
             margin: 0;
-            color: #8c7e74;
+            color: #7a5c45;
             font-style: italic;
         }
 
         .verse-ref {
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             color: var(--primary-color);
-            margin-top: 6px;
+            margin-top: 8px;
             display: block;
             letter-spacing: 0.1em;
+            font-weight: bold;
         }
 
         /* 主卡片容器 */
@@ -98,18 +101,19 @@
             background-color: var(--card-bg);
             width: 100%;
             max-width: 420px;
-            border-radius: 4px;
-            box-shadow: 0 10px 30px rgba(140, 126, 116, 0.12);
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(90, 58, 36, 0.08);
             padding: 24px;
+            margin-bottom: 40px;
         }
 
-        /* 上傳工作區 */
+        /* 上傳工作區 (4:3 比例) */
         .upload-zone {
             width: 100%;
-            aspect-ratio: 2 / 1; /* 完美符合 2:1 的相框比例 */
+            aspect-ratio: 4 / 3;
             background-color: var(--accent-light);
-            border: 1px dashed #d1c7bd;
-            border-radius: 2px;
+            border: 1px dashed #ced2c9;
+            border-radius: 4px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -129,15 +133,15 @@
         }
 
         .placeholder-content svg {
-            width: 26px;
-            height: 26px;
+            width: 32px;
+            height: 32px;
             fill: #a3968c;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
         }
 
         .placeholder-text {
-            font-size: 0.85rem;
-            font-weight: 300;
+            font-size: 0.9rem;
+            font-weight: 400;
         }
 
         #fileInput {
@@ -160,31 +164,46 @@
         }
 
         .result-title {
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             color: var(--primary-color);
             margin-bottom: 16px;
-            font-weight: 400;
+            font-weight: 500;
         }
 
         #resultImage {
             width: 100%;
-            border-radius: 2px;
+            border-radius: 4px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
         }
 
         .save-tip {
             margin-top: 14px;
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             color: #a3968c;
-            font-weight: 300;
+            font-weight: 400;
         }
 
-        /* 頁尾資訊 */
+        /* 網頁最下方的插圖展示區域 */
+        .illustration-footer {
+            width: 100%;
+            max-width: 420px;
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .illustration-footer img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(90, 58, 36, 0.05);
+            border: 1px solid #eee2d5;
+        }
+
+        /* 頁尾版權資訊 */
         footer {
-            margin-top: auto;
-            padding-top: 40px;
-            font-size: 0.75rem;
-            color: #b5aba4;
+            margin-top: 30px;
+            font-size: 0.8rem;
+            color: #a3968c;
             text-align: center;
         }
 
@@ -222,6 +241,10 @@
         </div>
     </div>
 
+    <div class="illustration-footer">
+        <img src="image_bd0b81.png" alt="Wedding Illustration">
+    </div>
+
     <footer>
         Thank you for being a part of our story.
     </footer>
@@ -251,15 +274,15 @@
                 const userImg = new Image();
                 userImg.onload = function() {
                     
-                    // 以相框尺寸為畫布基準
-                    canvas.width = frameImage.width || 2000; 
-                    canvas.height = frameImage.height || 1000;
+                    // 建立 4:3 高解析度畫布
+                    canvas.width = 1440; 
+                    canvas.height = 1080;
 
                     const canvasRatio = canvas.width / canvas.height;
                     const imgRatio = userImg.width / userImg.height;
                     let drawWidth, drawHeight, drawX, drawY;
 
-                    // 滿版縮放算法
+                    // 滿版縮放算法 (Cover)
                     if (imgRatio > canvasRatio) {
                         drawHeight = canvas.height;
                         drawWidth = userImg.width * (canvas.height / userImg.height);
@@ -274,7 +297,11 @@
 
                     // 繪製合成
                     ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    
+                    // 1. 先畫賓客照片
                     ctx.drawImage(userImg, drawX, drawY, drawWidth, drawHeight);
+                    
+                    // 2. 再疊上婚禮相框
                     ctx.drawImage(frameImage, 0, 0, canvas.width, canvas.height);
 
                     // 輸出高畫質圖片
