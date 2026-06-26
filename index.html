@@ -3,88 +3,163 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>我們的婚禮拍貼機</title>
+    <title>承緯 & 書念's Wedding Photo Booth</title>
+    <!-- 引入優雅的 Google 字體 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Noto+Serif+TC:wght@300;400&display=swap" rel="stylesheet">
+    
     <style>
         :root {
-            --primary-color: #e04d75;
-            --bg-color: #fff5f7;
+            --primary-color: #ba7a8c;     /* 莫蘭迪優雅粉 */
+            --text-main: #4a4444;         /* 深炭灰（比純黑更柔和） */
+            --bg-color: #fcf9f6;          /* 質感溫潤的燕麥奶色 */
+            --card-bg: #ffffff;
+            --accent-light: #f5ece5;
         }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: 'Cormorant Garamond', 'Noto Serif TC', serif;
             background-color: var(--bg-color);
             margin: 0;
-            padding: 20px;
+            padding: 40px 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            color: #4a4a4a;
+            color: var(--text-main);
+            min-height: 100vh;
+            letter-spacing: 0.05em;
         }
-        h1 {
-            font-size: 1.5rem;
-            color: var(--primary-color);
-            margin-bottom: 5px;
+
+        /* 標頭設計 */
+        header {
             text-align: center;
+            margin-bottom: 35px;
         }
-        p.subtitle {
-            font-size: 0.9rem;
-            margin-top: 0;
-            margin-bottom: 20px;
-            color: #888;
+
+        .wedding-title {
+            font-size: 1.6rem;
+            font-weight: 400;
+            color: var(--text-main);
+            margin: 0 0 8px 0;
+            letter-spacing: 0.1em;
         }
-        /* 照片工作區 */
-        .upload-container {
+        
+        .wedding-title span {
+            font-size: 1.2rem;
+            color: var(--primary-color);
+            margin: 0 6px;
+        }
+
+        .subtitle {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: #9c938e;
+            margin: 0;
+        }
+
+        /* 主卡片容器 */
+        .main-card {
+            background-color: var(--card-bg);
             width: 100%;
-            max-width: 400px;
-            aspect-ratio: 2 / 1; /* 配合你 2:1 的框比例 */
-            border: 2px dashed #ccc;
-            border-radius: 12px;
-            background: #fff;
+            max-width: 420px;
+            border-radius: 4px;
+            box-shadow: 0 10px 30px rgba(156, 147, 142, 0.15);
+            padding: 24px;
+            transition: all 0.4s ease;
+        }
+
+        /* 上傳工作區 */
+        .upload-zone {
+            width: 100%;
+            aspect-ratio: 2 / 1; /* 完美的 2:1 比例配您的相框 */
+            background-color: var(--accent-light);
+            border: 1px dashed #d1c7bd;
+            border-radius: 2px;
             display: flex;
             justify-content: center;
             align-items: center;
             cursor: pointer;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            transition: background-color 0.3s;
         }
-        .upload-placeholder {
+
+        .upload-zone:active {
+            background-color: #ebdcd0;
+        }
+
+        .placeholder-content {
             text-align: center;
-            pointer-events: none;
-            color: #aaa;
+            color: #8a7e75;
         }
-        .upload-placeholder svg {
-            width: 40px;
-            height: 40px;
-            fill: #ccc;
-            margin-bottom: 8px;
+
+        .placeholder-content svg {
+            width: 28px;
+            height: 28px;
+            fill: #a3968c;
+            margin-bottom: 12px;
         }
+
+        .placeholder-text {
+            font-size: 0.9rem;
+            font-weight: 300;
+        }
+
         #fileInput {
             display: none;
         }
-        /* 結果預覽區 */
-        .result-container {
+
+        /* 結果展示區 */
+        .result-zone {
             display: none;
-            width: 100%;
-            max-width: 400px;
-            margin-top: 20px;
+            margin-top: 24px;
             text-align: center;
+            border-top: 1px solid #f0e8e2;
+            padding-top: 24px;
+            animation: fadeIn 0.6s ease forwards;
         }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .result-title {
+            font-size: 0.95rem;
+            color: var(--primary-color);
+            margin-bottom: 16px;
+            font-weight: 400;
+        }
+
         #resultImage {
             width: 100%;
-            border-radius: 12px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-            border: 1px solid #eee;
+            border-radius: 2px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
         }
-        .tip {
-            margin-top: 12px;
-            font-size: 0.9rem;
-            color: var(--primary-color);
-            font-weight: bold;
-            animation: blink 1.5s infinite;
+
+        .save-tip {
+            margin-top: 16px;
+            font-size: 0.8rem;
+            color: #a3968c;
+            font-weight: 300;
         }
-        @keyframes blink {
-            50% { opacity: 0.5; }
+
+        /* 頁尾資訊 */
+        footer {
+            margin-top: auto;
+            padding-top: 40px;
+            font-size: 0.75rem;
+            color: #b5aba4;
+            text-align: center;
         }
+
         /* 隱藏的畫布 */
         canvas {
             display: none;
@@ -93,22 +168,32 @@
 </head>
 <body>
 
-    <h1>Wedding Photo Booth</h1>
-    <p class="subtitle">拍下美好的瞬間，帶走專屬回憶吧！</p>
+    <header>
+        <h1 class="wedding-title">承緯 <span>✧</span> 書念</h1>
+        <p class="subtitle">Wedding Photo Booth</p>
+    </header>
 
-    <div class="upload-container" id="dropZone" onclick="document.getElementById('fileInput').click()">
-        <div class="upload-placeholder" id="placeholderText">
-            <svg viewBox="0 0 24 24"><path d="M19 12h-2v3H7v-3H5v3c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2v-3zm-1.41-4.59L13 2.83V13h-2V2.83L7.41 7.41 6 6l6-6 6 6-1.41 1.41z"/></svg>
-            <div>點擊拍照或上傳照片</div>
+    <div class="main-card">
+        <!-- 上傳按鈕區域 -->
+        <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
+            <div class="placeholder-content" id="placeholderText">
+                <svg viewBox="0 0 24 24"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"/></svg>
+                <div class="placeholder-text">點擊開啟相機或上傳照片</div>
+            </div>
+        </div>
+        <input type="file" id="fileInput" accept="image/*">
+
+        <!-- 合成結果展示區域 -->
+        <div class="result-zone" id="resultArea">
+            <div class="result-title">✧ 謝謝您一同見證我們的幸福 ✧</div>
+            <img id="resultImage" alt="Wedding Photo">
+            <div class="save-tip">長按上方圖片即可儲存至手機</div>
         </div>
     </div>
-    <input type="file" id="fileInput" accept="image/*">
 
-    <div class="result-container" id="resultArea">
-        <p>✨ 您的專屬照片已生成 ✨</p>
-        <img id="resultImage" alt="婚禮拍貼結果">
-        <p class="tip">💡 點選照片「長按」即可儲存到手機唷！</p>
-    </div>
+    <footer>
+        Thank you for being a part of our story.
+    </footer>
 
     <canvas id="canvas"></canvas>
 
@@ -120,7 +205,7 @@
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
 
-        // 載入新人的相框 (確保此處檔名與你的相框圖檔名一致)
+        // 預先載入外框
         const frameImage = new Image();
         frameImage.src = '框.png'; 
 
@@ -128,22 +213,22 @@
             const file = e.target.files[0];
             if (!file) return;
 
-            placeholderText.innerHTML = '<div>照片處理中，請稍候...</div>';
+            placeholderText.innerHTML = '<div class="placeholder-text" style="letter-spacing:0.1em;">正在為您調整相框...</div>';
 
             const reader = new FileReader();
             reader.onload = function(event) {
                 const userImg = new Image();
                 userImg.onload = function() {
-                    // 1. 以「相框」的原始尺寸為畫布基準，確保外框不失真
-                    // 備註：因您的外框是 2000x1000 (2:1)，畫布會以此大尺寸合成，下載時才清晰
+                    
+                    // 以相框尺寸為畫布基準
                     canvas.width = frameImage.width || 2000; 
                     canvas.height = frameImage.height || 1000;
 
-                    // 2. 計算賓客照片的縮放，使其「填滿 (Cover)」整個畫布
                     const canvasRatio = canvas.width / canvas.height;
                     const imgRatio = userImg.width / userImg.height;
                     let drawWidth, drawHeight, drawX, drawY;
 
+                    // 滿版縮放算法
                     if (imgRatio > canvasRatio) {
                         drawHeight = canvas.height;
                         drawWidth = userImg.width * (canvas.height / userImg.height);
@@ -156,27 +241,25 @@
                         drawY = (canvas.height - drawHeight) / 2;
                     }
 
-                    // 3. 開始繪製
+                    // 繪製合成
                     ctx.clearRect(0, 0, canvas.width, canvas.height);
-                    
-                    // 先畫賓客照片（底層）
                     ctx.drawImage(userImg, drawX, drawY, drawWidth, drawHeight);
-                    
-                    // 再疊上婚禮相框（頂層）
                     ctx.drawImage(frameImage, 0, 0, canvas.width, canvas.height);
 
-                    // 4. 輸出成圖片格式，讓手機可以長按儲存
+                    // 輸出高畫質圖片
                     resultImage.src = canvas.toDataURL('image/jpeg', 0.9);
                     resultArea.style.display = 'block';
                     
-                    // 恢復上傳區文字
+                    // 恢復上傳文字狀態
                     placeholderText.innerHTML = `
-                        <svg viewBox="0 0 24 24"><path d="M19 12h-2v3H7v-3H5v3c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2v-3zm-1.41-4.59L13 2.83V13h-2V2.83L7.41 7.41 6 6l6-6 6 6-1.41 1.41z"/></svg>
-                        <div>重新上傳照片</div>
+                        <svg viewBox="0 0 24 24"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"/></svg>
+                        <div class="placeholder-text">重新更換照片</div>
                     `;
                     
-                    // 自動滾動到結果區域
-                    resultArea.scrollIntoView({ behavior: 'smooth' });
+                    // 平滑滾動到成品畫面
+                    setTimeout(() => {
+                        resultArea.scrollIntoView({ behavior: 'smooth' });
+                    }, 100);
                 };
                 userImg.src = event.target.result;
             };
