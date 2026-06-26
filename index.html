@@ -277,32 +277,32 @@
                     const imgRatio = userImg.width / userImg.height;
                     let drawWidth, drawHeight, drawX, drawY;
 
-                    // 調整為 Contain 演算法：完整保留原圖，絕不裁剪
+                    // 最佳化最大化塞滿演算法 (加成放大系數，微調緊貼紅色框內部)
                     if (imgRatio > canvasRatio) {
-                        // 照片較寬，以畫布寬度為基準縮放
-                        drawWidth = canvas.width;
-                        drawHeight = canvas.width / imgRatio;
-                        drawX = 0;
-                        drawY = (canvas.height - drawHeight) / 2;
+                        // 橫照：以寬度填滿為基準，並額外放大 1.06 倍使兩側和上下貼近紅色框
+                        drawWidth = canvas.width * 1.06;
+                        drawHeight = drawWidth / imgRatio;
                     } else {
-                        // 照片較窄，以畫布高度為基準縮放
-                        drawHeight = canvas.height;
-                        drawWidth = canvas.height * imgRatio;
-                        drawX = (canvas.width - drawWidth) / 2;
-                        drawY = 0;
+                        // 直照或方照：以高度填滿為基準，額外放大 1.08 倍最大化塞入
+                        drawHeight = canvas.height * 1.08;
+                        drawWidth = drawHeight * imgRatio;
                     }
+                    
+                    // 置中計算
+                    drawX = (canvas.width - drawWidth) / 2;
+                    drawY = (canvas.height - drawHeight) / 2;
 
                     // 繪製與合成
                     ctx.clearRect(0, 0, canvas.width, canvas.height);
                     
-                    // 背景填滿純黑（避免不合比例的照片露出透明底）
+                    // 背景填滿純黑
                     ctx.fillStyle = '#000000';
                     ctx.fillRect(0, 0, canvas.width, canvas.height);
                     
-                    // 1. 繪製完整原圖照片
+                    // 1. 先繪製最大化後的原圖照片（底層）
                     ctx.drawImage(userImg, drawX, drawY, drawWidth, drawHeight);
                     
-                    // 2. 疊上相框
+                    // 2. 疊上婚禮相框（頂層）
                     ctx.drawImage(frameImage, 0, 0, canvas.width, canvas.height);
 
                     // 輸出高畫質 JPEG
