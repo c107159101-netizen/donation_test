@@ -26,26 +26,24 @@
         body {
             background-color: var(--bg-color);
             margin: 0;
-            padding: 50px 24px;
+            padding: 40px 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
             color: var(--text-main);
             min-height: 100vh;
             letter-spacing: 0.05em;
-            /* 全域預設字體 */
             font-family: 'JetBrains Mono', 'Noto Sans TC', sans-serif !important;
         }
 
         /* 標頭設計 */
         header {
             text-align: center;
-            margin-bottom: 35px;
+            margin-bottom: 30px;
             max-width: 440px;
             width: 100%;
         }
 
-        /* 英文名字強制使用 JetBrains Mono */
         .wedding-title-en {
             font-family: 'JetBrains Mono', monospace !important;
             font-size: 2.2rem;
@@ -56,13 +54,12 @@
             letter-spacing: -0.02em;
         }
 
-        /* 中文名字強制使用 Noto Sans TC */
         .wedding-names-zh {
             font-family: 'Noto Sans TC', sans-serif !important;
             font-size: 1.05rem;
             font-weight: 400;
             color: var(--text-muted);
-            margin: 0 0 30px 0;
+            margin: 0 0 25px 0;
             letter-spacing: 0.2em;
             text-indent: 0.2em;
         }
@@ -71,17 +68,16 @@
         .welcome-container {
             border-top: 1px solid var(--accent-border);
             border-bottom: 1px solid var(--accent-border);
-            padding: 26px 15px;
-            margin-bottom: 35px;
+            padding: 24px 10px;
+            margin-bottom: 30px;
             text-align: center;
         }
 
-        /* 歡迎詞強制使用 Noto Sans TC */
         .welcome-text-top {
             font-family: 'Noto Sans TC', sans-serif !important;
             font-size: 1.05rem;
             line-height: 1.6;
-            margin: 0 0 10px 0;
+            margin: 0 0 8px 0;
             font-weight: 500;
             color: var(--text-main);
             letter-spacing: 0.08em;
@@ -102,12 +98,12 @@
             width: 100%;
             max-width: 440px;
             border-radius: 0px;
-            padding: 24px;
+            padding: 20px;
             margin-bottom: 30px;
             border: 1px solid var(--accent-border);
         }
 
-        /* 上傳區域 (4:3 比例) */
+        /* 上傳區域 (完美對應 iPhone 相機 4:3 比例) */
         .upload-zone {
             width: 100%;
             aspect-ratio: 4 / 3;
@@ -134,13 +130,12 @@
         }
 
         .placeholder-content svg {
-            width: 26px;
-            height: 26px;
+            width: 28px;
+            height: 28px;
             fill: var(--text-main);
             margin-bottom: 14px;
         }
 
-        /* 提示字強制使用 JetBrains Mono */
         .placeholder-text {
             font-family: 'JetBrains Mono', monospace !important;
             font-size: 0.8rem;
@@ -156,10 +151,10 @@
         /* 結果展示區 */
         .result-zone {
             display: none;
-            margin-top: 24px;
+            margin-top: 20px;
             text-align: center;
             border-top: 1px solid var(--accent-border);
-            padding-top: 24px;
+            padding-top: 20px;
             animation: fadeIn 0.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
         }
 
@@ -172,7 +167,7 @@
             font-family: 'JetBrains Mono', monospace !important;
             font-size: 0.8rem;
             color: var(--text-main);
-            margin-bottom: 18px;
+            margin-bottom: 16px;
             font-weight: 400;
             letter-spacing: 0.15em;
         }
@@ -185,17 +180,16 @@
 
         .save-tip {
             font-family: 'Noto Sans TC', sans-serif !important;
-            margin-top: 16px;
+            margin-top: 14px;
             font-size: 0.8rem;
             color: var(--text-muted);
             font-weight: 300;
             letter-spacing: 0.05em;
         }
 
-        /* 頁尾資訊 */
         footer {
             margin-top: auto;
-            padding-top: 40px;
+            padding-top: 30px;
             font-family: 'JetBrains Mono', monospace !important;
             font-size: 0.75rem;
             color: var(--text-muted);
@@ -203,7 +197,6 @@
             letter-spacing: 0.02em;
         }
 
-        /* 隱藏的畫布 */
         canvas {
             display: none;
         }
@@ -265,6 +258,7 @@
                 const userImg = new Image();
                 userImg.onload = function() {
                     
+                    // 設定高畫質 4:3 輸出解析度
                     canvas.width = 1440; 
                     canvas.height = 1080;
 
@@ -272,26 +266,35 @@
                     const imgRatio = userImg.width / userImg.height;
                     let drawWidth, drawHeight, drawX, drawY;
 
-                    // 最大化塞滿演算法
+                    // iPhone 智慧型無損 Contain 演算法：智慧辨識 16:9 / 4:3 / 方形
                     if (imgRatio > canvasRatio) {
-                        drawWidth = canvas.width * 1.0;
-                        drawHeight = drawWidth / imgRatio;
+                        // 橫式照片：以寬度塞滿，高度依比例縮放
+                        drawWidth = canvas.width;
+                        drawHeight = canvas.width / imgRatio;
                     } else {
-                        drawHeight = canvas.height * 1.0;
-                        drawWidth = drawHeight * imgRatio;
+                        // 直式照片 (iPhone 16:9 或 4:3 直拍)：以高度塞滿，寬度依比例縮放
+                        drawHeight = canvas.height;
+                        drawWidth = canvas.height * imgRatio;
                     }
                     
+                    // 精準水平與垂直置中，完美保留原圖不切邊
                     drawX = (canvas.width - drawWidth) / 2;
                     drawY = (canvas.height - drawHeight) / 2;
 
+                    // 清空畫布
                     ctx.clearRect(0, 0, canvas.width, canvas.height);
                     
+                    // 背景打底為極致純黑（讓未滿版邊緣無縫融入網頁）
                     ctx.fillStyle = '#000000';
                     ctx.fillRect(0, 0, canvas.width, canvas.height);
                     
+                    // 1. 先繪製不裁切的原圖照片
                     ctx.drawImage(userImg, drawX, drawY, drawWidth, drawHeight);
+                    
+                    // 2. 疊上紅色婚禮邊框
                     ctx.drawImage(frameImage, 0, 0, canvas.width, canvas.height);
 
+                    // 輸出高畫質 JPEG
                     resultImage.src = canvas.toDataURL('image/jpeg', 0.9);
                     resultArea.style.display = 'block';
                     
