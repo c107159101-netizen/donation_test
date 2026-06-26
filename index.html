@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>承緯 & 書念's Wedding Photo Booth</title>
-    <!-- 引入優雅的 Google 字體 -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Noto+Serif+TC:wght@300;400&display=swap" rel="stylesheet">
@@ -12,8 +11,8 @@
     <style>
         :root {
             --primary-color: #ba7a8c;     /* 莫蘭迪優雅粉 */
-            --text-main: #4a4444;         /* 深炭灰（比純黑更柔和） */
-            --bg-color: #fcf9f6;          /* 質感溫潤的燕麥奶色 */
+            --text-main: #5a4f48;         /* 溫暖的手繪深棕色（配合插畫風格） */
+            --bg-color: #fcf9f5;          /* 質感溫潤的燕麥奶色 */
             --card-bg: #ffffff;
             --accent-light: #f5ece5;
         }
@@ -27,7 +26,7 @@
             font-family: 'Cormorant Garamond', 'Noto Serif TC', serif;
             background-color: var(--bg-color);
             margin: 0;
-            padding: 40px 20px;
+            padding: 30px 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -36,32 +35,62 @@
             letter-spacing: 0.05em;
         }
 
-        /* 標頭設計 */
+        /* 標頭與婚禮文字設計 */
         header {
             text-align: center;
-            margin-bottom: 35px;
+            margin-bottom: 30px;
+            max-width: 420px;
+            width: 100%;
         }
 
-        .wedding-title {
+        .wedding-names {
             font-size: 1.6rem;
             font-weight: 400;
             color: var(--text-main);
-            margin: 0 0 8px 0;
-            letter-spacing: 0.1em;
+            margin: 0 0 15px 0;
+            letter-spacing: 0.15em;
         }
         
-        .wedding-title span {
+        .wedding-names span {
             font-size: 1.2rem;
             color: var(--primary-color);
-            margin: 0 6px;
+            margin: 0 8px;
         }
 
-        .subtitle {
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 0.2em;
-            color: #9c938e;
+        /* 經文與小花風格區塊 */
+        .verse-container {
+            background-color: rgba(255, 255, 255, 0.7);
+            border-radius: 4px;
+            padding: 16px;
+            margin-bottom: 25px;
+            border: 1px solid #ebdcd0;
+            position: relative;
+        }
+
+        .verse-zh {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin: 0 0 10px 0;
+            font-weight: 400;
+            color: #6e5f56;
+            letter-spacing: 0.08em;
+        }
+
+        .verse-en {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1rem;
+            line-height: 1.4;
             margin: 0;
+            color: #8c7e74;
+            font-style: italic;
+        }
+
+        .verse-ref {
+            font-size: 0.8rem;
+            color: var(--primary-color);
+            margin-top: 6px;
+            display: block;
+            letter-spacing: 0.1em;
         }
 
         /* 主卡片容器 */
@@ -70,15 +99,14 @@
             width: 100%;
             max-width: 420px;
             border-radius: 4px;
-            box-shadow: 0 10px 30px rgba(156, 147, 142, 0.15);
+            box-shadow: 0 10px 30px rgba(140, 126, 116, 0.12);
             padding: 24px;
-            transition: all 0.4s ease;
         }
 
         /* 上傳工作區 */
         .upload-zone {
             width: 100%;
-            aspect-ratio: 2 / 1; /* 完美的 2:1 比例配您的相框 */
+            aspect-ratio: 2 / 1; /* 完美符合 2:1 的相框比例 */
             background-color: var(--accent-light);
             border: 1px dashed #d1c7bd;
             border-radius: 2px;
@@ -101,14 +129,14 @@
         }
 
         .placeholder-content svg {
-            width: 28px;
-            height: 28px;
+            width: 26px;
+            height: 26px;
             fill: #a3968c;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
         }
 
         .placeholder-text {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: 300;
         }
 
@@ -132,7 +160,7 @@
         }
 
         .result-title {
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             color: var(--primary-color);
             margin-bottom: 16px;
             font-weight: 400;
@@ -145,7 +173,7 @@
         }
 
         .save-tip {
-            margin-top: 16px;
+            margin-top: 14px;
             font-size: 0.8rem;
             color: #a3968c;
             font-weight: 300;
@@ -169,12 +197,16 @@
 <body>
 
     <header>
-        <h1 class="wedding-title">承緯 <span>✧</span> 書念</h1>
-        <p class="subtitle">Wedding Photo Booth</p>
+        <h1 class="wedding-names">承緯 <span>✧</span> 書念</h1>
+        
+        <div class="verse-container">
+            <p class="verse-zh">兩個人比一個人好，<br>因為一起辛勤工作，共享美好的收穫。</p>
+            <p class="verse-en">Two are better than one because they have a good reward for their hard work.</p>
+            <span class="verse-ref">— Ec 4:9</span>
+        </div>
     </header>
 
     <div class="main-card">
-        <!-- 上傳按鈕區域 -->
         <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
             <div class="placeholder-content" id="placeholderText">
                 <svg viewBox="0 0 24 24"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"/></svg>
@@ -183,7 +215,6 @@
         </div>
         <input type="file" id="fileInput" accept="image/*">
 
-        <!-- 合成結果展示區域 -->
         <div class="result-zone" id="resultArea">
             <div class="result-title">✧ 謝謝您一同見證我們的幸福 ✧</div>
             <img id="resultImage" alt="Wedding Photo">
