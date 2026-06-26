@@ -2,405 +2,186 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>博幼基金會 - 二手捐贈愛心自我診斷器</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts Noto Sans TC -->
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>我們的婚禮拍貼機</title>
     <style>
+        :root {
+            --primary-color: #e04d75;
+            --bg-color: #fff5f7;
+        }
         body {
-            font-family: 'Noto Sans TC', sans-serif;
-            background-color: #FDFBF7; /* 溫暖的奶油米色背景 */
-            color: #334155;
-            scroll-behavior: smooth;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #4a4a4a;
         }
-        .boyo-teal { color: #00A19D; }
-        .bg-boyo-teal { background-color: #00A19D; }
-        .boyo-navy { color: #2D3E50; }
-        .bg-boyo-navy { background-color: #2D3E50; }
-        .border-boyo-teal { border-color: #00A19D; }
-
-        /* 舒適的卡片懸停動畫 */
-        .option-card {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        h1 {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin-bottom: 5px;
+            text-align: center;
         }
-        .option-card:hover {
-            transform: translateY(-3px);
+        p.subtitle {
+            font-size: 0.9rem;
+            margin-top: 0;
+            margin-bottom: 20px;
+            color: #888;
         }
-
-        /* 自定義動態出現效果 */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        /* 照片工作區 */
+        .upload-container {
+            width: 100%;
+            max-width: 400px;
+            aspect-ratio: 2 / 1; /* 配合你 2:1 的框比例 */
+            border: 2px dashed #ccc;
+            border-radius: 12px;
+            background: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
         }
-        .animate-fade-in {
-            animation: fadeInUp 0.4s ease-out forwards;
+        .upload-placeholder {
+            text-align: center;
+            pointer-events: none;
+            color: #aaa;
         }
-        
-        /* 捲軸美化 */
-        ::-webkit-scrollbar {
-            width: 8px;
+        .upload-placeholder svg {
+            width: 40px;
+            height: 40px;
+            fill: #ccc;
+            margin-bottom: 8px;
         }
-        ::-webkit-scrollbar-track {
-            background: #F1F5F9;
+        #fileInput {
+            display: none;
         }
-        ::-webkit-scrollbar-thumb {
-            background: #CBD5E1;
-            border-radius: 4px;
+        /* 結果預覽區 */
+        .result-container {
+            display: none;
+            width: 100%;
+            max-width: 400px;
+            margin-top: 20px;
+            text-align: center;
         }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #94A3B8;
+        #resultImage {
+            width: 100%;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            border: 1px solid #eee;
+        }
+        .tip {
+            margin-top: 12px;
+            font-size: 0.9rem;
+            color: var(--primary-color);
+            font-weight: bold;
+            animation: blink 1.5s infinite;
+        }
+        @keyframes blink {
+            50% { opacity: 0.5; }
+        }
+        /* 隱藏的畫布 */
+        canvas {
+            display: none;
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between">
+<body>
 
-    <!-- 頂部精簡 Navbar -->
-    <nav class="bg-white shadow-sm border-b border-orange-50/50">
-        <div class="max-w-4xl mx-auto px-4 py-4 flex justify-between items-center">
-            <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 bg-boyo-teal rounded-full flex items-center justify-center text-white font-bold text-lg shadow-sm">博</div>
-                <div>
-                    <span class="text-sm font-bold boyo-navy block">博幼社會福利基金會</span>
-                    <span class="text-[10px] text-slate-400 block tracking-wider">BOYO SOCIAL WELFARE FOUNDATION</span>
-                </div>
-            </div>
-            <a href="https://www.boyo.org.tw/boyoV2/" class="text-xs font-semibold bg-slate-100 hover:bg-slate-200 boyo-navy px-4 py-2 rounded-full transition">
-                回博幼官網 ➔
-            </a>
+    <h1>Wedding Photo Booth</h1>
+    <p class="subtitle">拍下美好的瞬間，帶走專屬回憶吧！</p>
+
+    <div class="upload-container" id="dropZone" onclick="document.getElementById('fileInput').click()">
+        <div class="upload-placeholder" id="placeholderText">
+            <svg viewBox="0 0 24 24"><path d="M19 12h-2v3H7v-3H5v3c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2v-3zm-1.41-4.59L13 2.83V13h-2V2.83L7.41 7.41 6 6l6-6 6 6-1.41 1.41z"/></svg>
+            <div>點擊拍照或上傳照片</div>
         </div>
-    </nav>
+    </div>
+    <input type="file" id="fileInput" accept="image/*">
 
-    <!-- 主體內容區 -->
-    <main class="flex-grow max-w-3xl mx-auto px-4 py-10 md:py-16">
-        
-        <!-- 暖心標題與介紹 -->
-        <div class="text-center mb-10">
-            <span class="bg-teal-50 text-teal-800 text-xs font-bold px-4 py-1.5 rounded-full mb-3 inline-block tracking-wide">
-                讓愛不只是給予，更是一堂溫暖的教育課
-            </span>
-            <h1 class="text-2xl md:text-3xl font-bold boyo-navy leading-snug">
-                我的二手愛心，適合寄給課輔班孩子嗎？
-            </h1>
-            <p class="text-slate-500 text-sm mt-3 max-w-xl mx-auto leading-relaxed">
-                謝謝您願意與博幼一起，透過「精準分享」教導偏鄉孩子珍惜與尊重的價值。
-                請點選以下您預計捐贈的二手物資狀態，我們將為您評估最貼近課輔需求的捐贈方式：
-            </p>
-        </div>
+    <div class="result-container" id="resultArea">
+        <p>✨ 您的專屬照片已生成 ✨</p>
+        <img id="resultImage" alt="婚禮拍貼結果">
+        <p class="tip">💡 點選照片「長按」即可儲存到手機唷！</p>
+    </div>
 
-        <!-- 診斷主卡片 -->
-        <div class="bg-white rounded-3xl shadow-md border border-slate-100 p-6 md:p-10 mb-8">
-            
-            <!-- 步驟標題 1 -->
-            <div class="flex items-center space-x-2 mb-6">
-                <span class="w-6 h-6 rounded-full bg-boyo-teal text-white text-xs font-bold flex items-center justify-center">1</span>
-                <h2 class="font-bold text-slate-800 text-base md:text-lg">選擇您預計捐贈的物品類別</h2>
-            </div>
-
-            <!-- 類別選擇按鈕組 -->
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-                <button onclick="selectCategory('stationery', this)" class="category-btn p-4 rounded-2xl border-2 border-teal-500 bg-teal-50/20 text-teal-800 option-card text-center" id="default-btn">
-                    <span class="text-3xl block mb-2">✏️</span>
-                    <span class="text-sm font-bold block">文具 / 教具</span>
-                </button>
-                <button onclick="selectCategory('books', this)" class="category-btn p-4 rounded-2xl border-2 border-slate-100 bg-white text-slate-600 hover:border-teal-200 hover:bg-teal-50/10 option-card text-center">
-                    <span class="text-3xl block mb-2">📚</span>
-                    <span class="text-sm font-bold block">繪本 / 童書</span>
-                </button>
-                <button onclick="selectCategory('clothes', this)" class="category-btn p-4 rounded-2xl border-2 border-slate-100 bg-white text-slate-600 hover:border-teal-200 hover:bg-teal-50/10 option-card text-center">
-                    <span class="text-3xl block mb-2">👕</span>
-                    <span class="text-sm font-bold block">衣物 / 生活雜貨</span>
-                </button>
-                <button onclick="selectCategory('appliances', this)" class="category-btn p-4 rounded-2xl border-2 border-slate-100 bg-white text-slate-600 hover:border-teal-200 hover:bg-teal-50/10 option-card text-center">
-                    <span class="text-3xl block mb-2">🔌</span>
-                    <span class="text-sm font-bold block">3C / 電器</span>
-                </button>
-            </div>
-
-            <!-- 步驟標題 2 -->
-            <div class="flex items-center space-x-2 mb-6">
-                <span class="w-6 h-6 rounded-full bg-boyo-teal text-white text-xs font-bold flex items-center justify-center">2</span>
-                <h2 class="font-bold text-slate-800 text-base md:text-lg">點選目前的物品真實狀態</h2>
-            </div>
-
-            <!-- 狀態單選框卡片區域 -->
-            <div class="grid md:grid-cols-2 gap-4 mb-8" id="status-container">
-                <!-- 由 JavaScript 動態注入單選卡片 -->
-            </div>
-
-            <!-- 診斷提交按鈕 -->
-            <div class="text-center">
-                <button onclick="evaluateDonation()" class="bg-boyo-teal text-white px-10 py-4 rounded-full font-bold shadow-md hover:bg-opacity-90 hover:shadow-lg transition transform hover:-translate-y-0.5 inline-flex items-center space-x-2">
-                    <span>💡</span>
-                    <span>開始智慧診斷</span>
-                </button>
-            </div>
-
-            <!-- 診斷結果呈現區（預設隱藏） -->
-            <div id="evaluation-result" class="mt-8 p-6 rounded-2xl bg-slate-50 border border-slate-200 hidden">
-                <!-- 由 JavaScript 依診斷結果渲染內容 -->
-            </div>
-
-        </div>
-
-        <!-- 輔助資訊：寄送與諮詢說明 -->
-        <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
-            <button onclick="toggleCenterTable()" class="w-full flex justify-between items-center text-left font-bold boyo-navy hover:text-boyo-teal transition">
-                <span class="flex items-center"><span class="mr-2">📦</span> 診斷通過後，要寄去哪裡？</span>
-                <span id="accordion-icon" class="text-xl">+</span>
-            </button>
-            <div id="center-table-content" class="hidden mt-6 pt-6 border-t border-slate-100 space-y-6">
-                <div class="bg-teal-50/30 p-5 rounded-2xl border border-teal-100/50">
-                    <p class="text-sm text-slate-700 leading-relaxed mb-4">
-                        為了確保您的愛心物資能發揮最大效益，博幼目前採取<b>「總會統一評估、精準分配」</b>。若您的物資經過上方診斷符合需求，請先透過以下方式聯繫我們，我們將指引您最合適寄送的課輔中心分點：
-                    </p>
-                    <div class="grid md:grid-cols-2 gap-4">
-                        <div class="p-4 bg-white rounded-xl border border-slate-100 shadow-sm">
-                            <span class="block text-teal-600 font-bold text-xs uppercase mb-1">📞 專人電話諮詢</span>
-                            <span class="text-sm font-bold text-slate-800 block">行政組 洪承緯 專員</span>
-                            <span class="block text-xs text-slate-500 mt-2">聯絡電話：049-2915055 分機 234</span>
-                            <span class="block text-[10px] text-slate-400 mt-1">（服務時間：週一至週五 08:30 - 17:30）</span>
-                        </div>
-                        <div class="p-4 bg-white rounded-xl border border-slate-100 shadow-sm">
-                            <span class="block text-teal-600 font-bold text-xs uppercase mb-1">💬 LINE 線上評估</span>
-                            <span class="text-sm font-bold text-slate-800 block">博幼公務機 LINE 帳號</span>
-                            <span class="block text-xs text-slate-500 mt-2">LINE ID：<strong class="text-teal-700 bg-teal-50 px-1.5 py-0.5 rounded select-all">boyo14935826</strong></span>
-                            <span class="block text-[10px] text-slate-400 mt-1">（歡迎直接拍照傳送物資細節評估）</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="border-t border-slate-100 pt-4 text-xs text-slate-500 leading-relaxed">
-                    <h4 class="font-bold text-slate-700 mb-1.5">總會寄送地址預備資訊：</h4>
-                    <p><b>收件人：</b> 總會行政組（洪承緯 專員 收）</p>
-                    <p><b>寄送地址：</b> 54547 南投縣埔里鎮安四街131號208教室</p>
-                </div>
-            </div>
-        </div>
-
-    </main>
-
-    <!-- 頁尾與諮詢管道 -->
-    <footer class="bg-boyo-navy text-slate-400 py-10 mt-16 border-t-4 border-boyo-teal">
-        <div class="max-w-4xl mx-auto px-4 text-center">
-            <h3 class="text-white font-bold mb-3 text-sm">對於二手捐物仍有疑問嗎？歡迎聯繫我們：</h3>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-2xl mx-auto mb-8">
-                <div class="p-3 bg-white/5 rounded-xl border border-white/10 text-xs">
-                    <span class="block text-teal-400 font-semibold mb-1">📞 專人諮詢窗口</span>
-                    <span class="text-white">行政組 洪專員 049-2915055 #234</span>
-                </div>
-                <div class="p-3 bg-white/5 rounded-xl border border-white/10 text-xs">
-                    <span class="block text-teal-400 font-semibold mb-1">📧 照片評估信箱</span>
-                    <span class="text-white">bo.yo@ecp.boyo.org.tw</span>
-                </div>
-                <div class="p-3 bg-white/5 rounded-xl border border-white/10 text-xs">
-                    <span class="block text-teal-400 font-semibold mb-1">💬 LINE 線上諮詢</span>
-                    <span class="text-white">公務 LINE ID：boyo14935826</span>
-                </div>
-            </div>
-            <p class="text-[11px]">© 2026 博幼社會福利基金會 | 讓知識帶希望回家，讓每份愛心剛剛好。</p>
-        </div>
-    </footer>
+    <canvas id="canvas"></canvas>
 
     <script>
-        // 資料庫設計 (correct 為 true 代表符合，false 代表不接收)
-        const statusData = {
-            stationery: [
-                { id: 'st_new', text: '全新未拆封之包裝文具 / 學習用品', correct: true },
-                { id: 'st_good_second', text: '二手物：外觀乾淨無破損，橡皮擦或修正帶功能正常、近全新', correct: true },
-                { id: 'st_used', text: '二手物：筆芯已短缺、修正帶已耗損大半、外盒有髒污塗鴉', correct: false },
-                { id: 'st_invalid', text: '功能故障、生鏽、斷裂，或有明顯個人姓名簽名之文具', correct: false }
-            ],
-            books: [
-                { id: 'bk_good', text: '全新或狀態良好二手：適合中小學生閱讀之繪本/童書/小說（無黃斑、缺頁、塗寫）', correct: true },
-                { id: 'bk_damage', text: '二手物：繪本或書籍有缺頁、破損，或有寫字劃記筆跡', correct: false },
-                { id: 'bk_adult', text: '二手物：過期大眾雜誌、成人口譯書、商業企管等非學童圖書', correct: false },
-                { id: 'bk_textbook', text: '二手物：舊學校教科書、考試參考書', correct: false }
-            ],
-            clothes: [
-                { id: 'cl_none_notice', text: '⚠️ 溫馨說明：博幼目前全台分點皆「不收受」二手成人衣物與一般家庭雜物', correct: false },
-                { id: 'cl_new_supplies', text: '全新：不鏽鋼保鮮盒、洗碗精、未拆封日/夜用衛生棉等日常衛生物資', correct: true },
-                { id: 'cl_used_life', text: '二手：家庭清倉淘汰的裝飾品、二手馬克杯、舊玩偶', correct: false }
-            ],
-            appliances: [
-                { id: 'ap_work', text: '二手物：可正常插電運作，功能完好且隨附原廠線材（如檯燈、電器）', correct: true },
-                { id: 'ap_lack', text: '二手物：雖然可以正常使用，但缺少充電頭、電源線，或有接觸不良', correct: false },
-                { id: 'ap_broken', text: '二手物：外觀嚴重破損、蓄電功能衰退、時鐘指針故障等', correct: false }
-            ]
-        };
+        const fileInput = document.getElementById('fileInput');
+        const resultArea = document.getElementById('resultArea');
+        const resultImage = document.getElementById('resultImage');
+        const placeholderText = document.getElementById('placeholderText');
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
 
-        let selectedCategory = 'stationery';
+        // 載入新人的相框 (確保此處檔名與你的相框圖檔名一致)
+        const frameImage = new Image();
+        frameImage.src = '框.png'; 
 
-        // 類別切換邏輯
-        function selectCategory(cat, btnElement) {
-            selectedCategory = cat;
-            
-            // 變更按鈕樣式
-            document.querySelectorAll('.category-btn').forEach(btn => {
-                btn.classList.remove('border-teal-500', 'bg-teal-50/20', 'text-teal-800');
-                btn.classList.add('border-slate-100', 'bg-white', 'text-slate-600');
-            });
-            btnElement.classList.add('border-teal-500', 'bg-teal-50/20', 'text-teal-800');
-            btnElement.classList.remove('border-slate-100', 'bg-white', 'text-slate-600');
+        fileInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
 
-            // 重新渲染單選框
-            renderStatusCheckboxes();
-            
-            // 隱藏先前的診斷結果
-            document.getElementById('evaluation-result').classList.add('hidden');
-        }
+            placeholderText.innerHTML = '<div>照片處理中，請稍候...</div>';
 
-        // 動態注入 Radio 單選框卡片
-        function renderStatusCheckboxes() {
-            const container = document.getElementById('status-container');
-            container.innerHTML = '';
-            const items = statusData[selectedCategory];
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const userImg = new Image();
+                userImg.onload = function() {
+                    // 1. 以「相框」的原始尺寸為畫布基準，確保外框不失真
+                    // 備註：因您的外框是 2000x1000 (2:1)，畫布會以此大尺寸合成，下載時才清晰
+                    canvas.width = frameImage.width || 2000; 
+                    canvas.height = frameImage.height || 1000;
 
-            items.forEach(item => {
-                const div = document.createElement('div');
-                div.className = "w-full";
-                div.innerHTML = `
-                    <label class="status-label flex items-start p-4 bg-slate-50 border border-slate-200 hover:border-teal-300 hover:bg-teal-50/10 rounded-2xl cursor-pointer transition select-none h-full w-full">
-                        <input type="radio" name="status-group" value="${item.id}" onchange="handleRadioChange(this)" class="w-4 h-4 text-teal-600 border-slate-300 focus:ring-teal-500 mt-1 mr-3 flex-shrink-0 cursor-pointer">
-                        <span class="text-xs md:text-sm font-medium text-slate-700 leading-relaxed">${item.text}</span>
-                    </label>
-                `;
-                container.appendChild(div);
-            });
-        }
+                    // 2. 計算賓客照片的縮放，使其「填滿 (Cover)」整個畫布
+                    const canvasRatio = canvas.width / canvas.height;
+                    const imgRatio = userImg.width / userImg.height;
+                    let drawWidth, drawHeight, drawX, drawY;
 
-        // 單選框變更樣式邏輯
-        function handleRadioChange(radio) {
-            // 先恢復所有標籤的初始狀態
-            document.querySelectorAll('.status-label').forEach(label => {
-                label.classList.remove('bg-teal-50/30', 'border-teal-500');
-                label.classList.add('bg-slate-50', 'border-slate-200');
-            });
-            
-            // 將目前勾選的標籤套用高亮外框與背景
-            const card = radio.closest('label');
-            if (radio.checked) {
-                card.classList.add('bg-teal-50/30', 'border-teal-500');
-                card.classList.remove('bg-slate-50', 'border-slate-200');
-            }
-        }
+                    if (imgRatio > canvasRatio) {
+                        drawHeight = canvas.height;
+                        drawWidth = userImg.width * (canvas.height / userImg.height);
+                        drawX = (canvas.width - drawWidth) / 2;
+                        drawY = 0;
+                    } else {
+                        drawWidth = canvas.width;
+                        drawHeight = userImg.height * (canvas.width / userImg.width);
+                        drawX = 0;
+                        drawY = (canvas.height - drawHeight) / 2;
+                    }
 
-        // 智慧診斷與評估邏輯
-        function evaluateDonation() {
-            const selectedRadio = document.querySelector('#status-container input[name="status-group"]:checked');
-            const resultDiv = document.getElementById('evaluation-result');
-            
-            resultDiv.classList.remove('hidden');
-            resultDiv.classList.add('animate-fade-in');
+                    // 3. 開始繪製
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    
+                    // 先畫賓客照片（底層）
+                    ctx.drawImage(userImg, drawX, drawY, drawWidth, drawHeight);
+                    
+                    // 再疊上婚禮相框（頂層）
+                    ctx.drawImage(frameImage, 0, 0, canvas.width, canvas.height);
 
-            // 防呆處理：若未點選
-            if (!selectedRadio) {
-                resultDiv.innerHTML = `
-                    <div class="flex items-center text-amber-700 font-bold mb-2 text-sm md:text-base">
-                        <span class="mr-2">⚠️</span> 請先在第二步中點選您的物資狀態！
-                    </div>
-                    <p class="text-xs text-slate-500">點選一項最貼近您物資現況的敘述，我們才能給您最精確的寄送建議喔。</p>
-                `;
-                return;
-            }
-
-            const currentItems = statusData[selectedCategory];
-            const matched = currentItems.find(i => i.id === selectedRadio.value);
-
-            if (!matched) return;
-
-            // 只要 correct 為 false，一律直接不接收
-            if (!matched.correct) {
-                let title = "此狀態物品「目前暫無需求」";
-                let content = "";
-
-                if (selectedCategory === 'clothes') {
-                    title = "二手衣物與家庭清倉品「目前暫無需求」";
-                    content = "博幼的主要服務為偏鄉孩子的「課後輔導與學科陪讀」，因無設置中途庇護之家，且各中心倉儲空間極其有限，故<b>無法代收成人二手服飾、家庭裝飾品或舊玩偶雜貨</b>。";
-                } else if (selectedCategory === 'books') {
-                    title = "此書籍項目「目前暫無需求，恕不接收」";
-                    content = "博幼的主要服務為偏鄉孩子的「課後輔導與學科陪讀」，因各中心倉儲與課輔教材規劃有限，<b>恕不接收過期雜誌、有缺頁、破損、有劃記寫字痕跡之書籍，以及舊教科書與考試參考書</b>。";
-                } else if (selectedCategory === 'appliances') {
-                    title = "損壞、缺少配件之3C電器「目前暫無需求，恕不接收」";
-                    content = "博幼各中心並無專業修復人力，為確保學童用電與自習室安全，<b>恕不接收外觀嚴重破損、蓄電功能衰退、時鐘指針故障，或缺少充電插頭、專用電源線與配件之二手電器產品</b>。";
-                } else if (selectedCategory === 'stationery') {
-                    title = "已磨損、髒污之文具用品「目前暫無需求，恕不接收」";
-                    content = "為維護學生的尊嚴與建立良好的愛物態度，我們希望提供給孩子的是外觀乾淨、功能正常無虞的工具。因此，<b>筆芯短缺、修正帶已耗損大半、有髒污塗鴉或個人明顯姓名簽名之二手文具，恕不進行接收</b>。";
-                }
-
-                resultDiv.innerHTML = `
-                    <div class="flex items-center text-red-600 font-bold mb-3 text-sm md:text-base">
-                        <span class="mr-2">❌</span> 溫馨說明 ── ${title}
-                    </div>
-                    <p class="text-xs md:text-sm text-slate-600 leading-relaxed mb-4">
-                        ${content}
-                    </p>
-                    <p class="text-xs md:text-sm text-slate-500 leading-relaxed mb-4">
-                        為了不浪費您的愛心，建議您可致電詢問其他有相關二手物資需求的社福單位，讓資源在最合適的地方發光發熱！
-                    </p>
-                    <div class="bg-teal-50/50 p-4 rounded-xl text-[11px] md:text-xs text-teal-800 border border-teal-100">
-                        💡 <b>永續教育小思考 (SDG 12)</b>：精準且合適的捐贈，不只避免社工行政負擔，更能維護課輔班孩子寬敞的活動學習空間，愛心剛剛好，陪伴才最溫暖。
-                    </div>
-                `;
-            } else {
-                // 完全符合規範，予以接收
-                let successMessage = "";
-                if (selectedCategory === 'stationery') {
-                    successMessage = "太棒了！全新或乾淨無髒污、功能完全正常的優質文具/教具，是各課輔分點孩子們每天上課自習最即時的學習助手。";
-                } else if (selectedCategory === 'books') {
-                    successMessage = "太棒了！無黃斑、無塗寫劃記、且無缺頁的優良繪本與童書，是開拓偏鄉學童視野、建立閱讀習慣最棒的禮物。";
-                } else if (selectedCategory === 'clothes') {
-                    successMessage = "太棒了！全新保鮮盒、洗碗精或未拆封的日常衛生用品，是維持課輔班學童每日生活、備餐衛生非常實用的消耗性耗材。";
-                } else if (selectedCategory === 'appliances') {
-                    successMessage = "太棒了！功能完好、可以正常運作且線材完整的二手檯燈或電器，能安全地陪伴孩子們在放學後舒適自習。";
-                }
-                renderSuccessResult(successMessage);
-            }
-        }
-
-        function renderSuccessResult(message) {
-            const resultDiv = document.getElementById('evaluation-result');
-            resultDiv.innerHTML = `
-                <div class="flex items-center text-emerald-600 font-bold mb-3 text-sm md:text-base">
-                    <span class="mr-2">🎉 非常合適 ── 這正是課輔班孩子需要的！</span>
-                </div>
-                <p class="text-xs md:text-sm text-slate-600 leading-relaxed mb-4">${message}</p>
-                <div class="bg-emerald-50/50 p-4 rounded-xl text-[11px] md:text-xs text-emerald-800 border border-emerald-100 mb-4">
-                    👉 <b>下一步寄送指南：</b><br>
-                    1. 建議使用乾淨紙箱打包裝箱。<br>
-                    2. 請在包裹內放置一張小紙條，寫上您的：<b>姓名、電話、收據開立抬頭與收件地址</b>（若不需要開立收據，亦請註明「不需收據」）。<br>
-                    3. 請點選下方<b>「診斷通過後，要寄去哪裡」</b>取得我們總會電話與公務機 LINE ID 確認最合適的分點中心！
-                </div>
-                <div class="bg-teal-50/50 p-4 rounded-xl text-[11px] md:text-xs text-teal-800 border border-teal-100">
-                    💡 <b>永續教育小思考 (SDG 12)</b>：珍惜物資的良性流動與循環，您與孩子們正共同完成一堂最溫暖的「不浪費環境課」！
-                </div>
-            `;
-        }
-
-        // 摺疊通訊錄開關
-        function toggleCenterTable() {
-            const content = document.getElementById('center-table-content');
-            const icon = document.getElementById('accordion-icon');
-            if (content.classList.contains('hidden')) {
-                content.classList.remove('hidden');
-                icon.textContent = '−';
-            } else {
-                content.classList.add('hidden');
-                icon.textContent = '+';
-            }
-        }
-
-        // 初始化
-        window.onload = function() {
-            renderStatusCheckboxes();
-        };
+                    // 4. 輸出成圖片格式，讓手機可以長按儲存
+                    resultImage.src = canvas.toDataURL('image/jpeg', 0.9);
+                    resultArea.style.display = 'block';
+                    
+                    // 恢復上傳區文字
+                    placeholderText.innerHTML = `
+                        <svg viewBox="0 0 24 24"><path d="M19 12h-2v3H7v-3H5v3c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2v-3zm-1.41-4.59L13 2.83V13h-2V2.83L7.41 7.41 6 6l6-6 6 6-1.41 1.41z"/></svg>
+                        <div>重新上傳照片</div>
+                    `;
+                    
+                    // 自動滾動到結果區域
+                    resultArea.scrollIntoView({ behavior: 'smooth' });
+                };
+                userImg.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
     </script>
 </body>
 </html>
