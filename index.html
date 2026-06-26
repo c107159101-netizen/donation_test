@@ -3,18 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>承緯 & 書念's Wedding Photo Booth</title>
+    <title>David & Hailey's Wedding Photo Booth</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Noto+Serif+TC:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Noto+Serif+TC:wght@300;400;500;600&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --primary-color: #e04d75;     /* 配合手繪外框的活力桃粉 */
-            --text-main: #5a3a24;         /* 配合手繪插畫的深褐咖啡色 */
-            --bg-color: #f7f4eb;          /* 完全提取插畫的溫暖米色底 */
+            --text-main: #1a1a1a;         /* 極簡深碳黑 */
+            --text-muted: #757575;        /* 質感冷灰色 */
+            --bg-color: #fcfcfc;          /* 畫廊冷調淡灰白底 */
             --card-bg: #ffffff;
-            --accent-light: #fbf9f5;
+            --accent-dark: #000000;       /* 純黑主題色 */
+            --accent-light: #f5f5f5;
         }
 
         * {
@@ -26,122 +27,129 @@
             font-family: 'Cormorant Garamond', 'Noto Serif TC', serif;
             background-color: var(--bg-color);
             margin: 0;
-            padding: 40px 20px;
+            padding: 50px 24px;
             display: flex;
             flex-direction: column;
             align-items: center;
             color: var(--text-main);
             min-height: 100vh;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.08em;
         }
 
-        /* 標頭與婚禮文字設計 */
+        /* 標頭設計 */
         header {
             text-align: center;
-            margin-bottom: 25px;
-            max-width: 420px;
+            margin-bottom: 40px;
+            max-width: 440px;
             width: 100%;
         }
 
-        .wedding-names {
-            font-size: 1.8rem;
-            font-weight: 500;
-            color: var(--text-main);
-            margin: 0 0 25px 0;
-            letter-spacing: 0.15em;
-        }
-        
-        .wedding-names span {
-            font-size: 1.2rem;
-            color: var(--primary-color);
-            margin: 0 8px;
+        .wedding-title-en {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.6rem;
+            font-weight: 300;
+            font-style: italic;
+            line-height: 1.1;
+            margin: 0 0 8px 0;
+            color: var(--accent-dark);
+            letter-spacing: 0.02em;
         }
 
-        /* 網頁上方的經文手繪感排版 */
+        .wedding-names-zh {
+            font-size: 1.1rem;
+            font-weight: 400;
+            color: var(--text-muted);
+            margin: 0 0 30px 0;
+            letter-spacing: 0.3em;
+            text-indent: 0.3em; /* 讓字體居中對齊更完美 */
+        }
+
+        /* 畫廊風極簡經文排版 */
         .verse-container {
-            background-color: var(--card-bg);
-            border-radius: 8px;
-            padding: 24px;
-            margin-bottom: 30px;
-            box-shadow: 0 4px 20px rgba(90, 58, 36, 0.05);
-            border: 1px solid #eee2d5;
-            text-align: left;
-            position: relative;
+            border-top: 1px solid #e0e0e0;
+            border-bottom: 1px solid #e0e0e0;
+            padding: 24px 10px;
+            margin-bottom: 35px;
+            text-align: center;
         }
 
         .verse-zh {
-            font-size: 1rem;
-            line-height: 1.7;
-            margin: 0 0 14px 0;
-            font-weight: 500;
+            font-size: 0.95rem;
+            line-height: 1.8;
+            margin: 0 0 12px 0;
+            font-weight: 400;
             color: var(--text-main);
-            letter-spacing: 0.08em;
+            letter-spacing: 0.1em;
         }
 
         .verse-en {
             font-family: 'Cormorant Garamond', serif;
-            font-size: 1.1rem;
-            line-height: 1.4;
-            margin: 0;
-            color: #7a5c45;
+            font-size: 1.05rem;
+            line-height: 1.5;
+            margin: 0 0 6px 0;
+            color: var(--text-muted);
             font-style: italic;
         }
 
         .verse-ref {
-            font-size: 0.85rem;
-            color: var(--primary-color);
-            margin-top: 8px;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
             display: block;
-            letter-spacing: 0.1em;
-            font-weight: bold;
         }
 
-        /* 主卡片容器 */
+        /* 主工作卡片 */
         .main-card {
             background-color: var(--card-bg);
             width: 100%;
-            max-width: 420px;
-            border-radius: 8px;
-            box-shadow: 0 10px 30px rgba(90, 58, 36, 0.08);
+            max-width: 440px;
+            border-radius: 0px; /* 經典極簡直角 */
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.04);
             padding: 24px;
-            margin-bottom: 40px;
+            margin-bottom: 50px;
+            border: 1px solid #eeeeee;
         }
 
-        /* 上傳工作區 (4:3 比例) */
+        /* 上傳區域 (4:3 比例) */
         .upload-zone {
             width: 100%;
             aspect-ratio: 4 / 3;
             background-color: var(--accent-light);
-            border: 1px dashed #ced2c9;
-            border-radius: 4px;
+            border: 1px dashed #cccccc;
+            border-radius: 0px;
             display: flex;
             justify-content: center;
             align-items: center;
             cursor: pointer;
             position: relative;
             overflow: hidden;
-            transition: background-color 0.3s;
+            transition: all 0.3s ease;
         }
 
         .upload-zone:active {
-            background-color: #ebdcd0;
+            background-color: #eaeaea;
+            transform: scale(0.99);
         }
 
         .placeholder-content {
             text-align: center;
-            color: #8a7e75;
+            color: var(--text-main);
         }
 
         .placeholder-content svg {
-            width: 32px;
-            height: 32px;
-            fill: #a3968c;
-            margin-bottom: 12px;
+            width: 24px;
+            height: 24px;
+            fill: var(--text-main);
+            margin-bottom: 14px;
+            font-weight: 300;
         }
 
         .placeholder-text {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: 400;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
         }
 
         #fileInput {
@@ -153,40 +161,42 @@
             display: none;
             margin-top: 24px;
             text-align: center;
-            border-top: 1px solid #f0e8e2;
+            border-top: 1px solid #eeeeee;
             padding-top: 24px;
-            animation: fadeIn 0.6s ease forwards;
+            animation: fadeIn 0.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+            from { opacity: 0; transform: translateY(8px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
         .result-title {
-            font-size: 0.95rem;
-            color: var(--primary-color);
-            margin-bottom: 16px;
+            font-size: 0.85rem;
+            color: var(--text-main);
+            margin-bottom: 18px;
             font-weight: 500;
+            letter-spacing: 0.2em;
         }
 
         #resultImage {
             width: 100%;
-            border-radius: 4px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            border-radius: 0px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
         }
 
         .save-tip {
-            margin-top: 14px;
-            font-size: 0.85rem;
-            color: #a3968c;
-            font-weight: 400;
+            margin-top: 16px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-weight: 300;
+            letter-spacing: 0.05em;
         }
 
-        /* 網頁最下方的插圖展示區域 */
+        /* 網頁最下方插圖區域 */
         .illustration-footer {
             width: 100%;
-            max-width: 420px;
+            max-width: 440px;
             margin-top: 10px;
             text-align: center;
         }
@@ -194,17 +204,21 @@
         .illustration-footer img {
             width: 100%;
             height: auto;
-            border-radius: 8px;
-            box-shadow: 0 4px 20px rgba(90, 58, 36, 0.05);
-            border: 1px solid #eee2d5;
+            border-radius: 0px;
+            border: 1px solid #eeeeee;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02);
         }
 
-        /* 頁尾版權資訊 */
+        /* 頁尾資訊 */
         footer {
-            margin-top: 30px;
-            font-size: 0.8rem;
-            color: #a3968c;
+            margin-top: auto;
+            padding-top: 50px;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.85rem;
+            font-style: italic;
+            color: var(--text-muted);
             text-align: center;
+            letter-spacing: 0.05em;
         }
 
         /* 隱藏的畫布 */
@@ -216,33 +230,34 @@
 <body>
 
     <header>
-        <h1 class="wedding-names">承緯 <span>✧</span> 書念</h1>
+        <h1 class="wedding-title-en">David & Hailey</h1>
+        <div class="wedding-names-zh">洪承緯 <span>|</span> 劉書念</div>
         
         <div class="verse-container">
             <p class="verse-zh">兩個人比一個人好，<br>因為一起辛勤工作，共享美好的收穫。</p>
             <p class="verse-en">Two are better than one because they have a good reward for their hard work.</p>
-            <span class="verse-ref">— Ec 4:9</span>
+            <span class="verse-ref">— Ecclesiastes 4:9</span>
         </div>
     </header>
 
     <div class="main-card">
         <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
             <div class="placeholder-content" id="placeholderText">
-                <svg viewBox="0 0 24 24"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"/></svg>
-                <div class="placeholder-text">點擊開啟相機或上傳照片</div>
+                <svg viewBox="0 0 24 24"><path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/></svg>
+                <div class="placeholder-text">TAKE A PHOTO / UPLOAD</div>
             </div>
         </div>
         <input type="file" id="fileInput" accept="image/*">
 
         <div class="result-zone" id="resultArea">
-            <div class="result-title">✧ 謝謝您一同見證我們的幸福 ✧</div>
+            <div class="result-title">✦ THANK YOU FOR BEING WITH US ✦</div>
             <img id="resultImage" alt="Wedding Photo">
             <div class="save-tip">長按上方圖片即可儲存至手機</div>
         </div>
     </div>
 
     <div class="illustration-footer">
-        <img src="image_bd0b81.png" alt="Wedding Illustration">
+        <img src="image_c9be66.png" alt="Wedding Illustration">
     </div>
 
     <footer>
@@ -267,14 +282,14 @@
             const file = e.target.files[0];
             if (!file) return;
 
-            placeholderText.innerHTML = '<div class="placeholder-text" style="letter-spacing:0.1em;">正在為您調整相框...</div>';
+            placeholderText.innerHTML = '<div class="placeholder-text">PROCESSING...</div>';
 
             const reader = new FileReader();
             reader.onload = function(event) {
                 const userImg = new Image();
                 userImg.onload = function() {
                     
-                    // 建立 4:3 高解析度畫布
+                    // 建立高清晰度 4:3 畫布
                     canvas.width = 1440; 
                     canvas.height = 1080;
 
@@ -282,7 +297,7 @@
                     const imgRatio = userImg.width / userImg.height;
                     let drawWidth, drawHeight, drawX, drawY;
 
-                    // 滿版縮放算法 (Cover)
+                    // Cover 演算法
                     if (imgRatio > canvasRatio) {
                         drawHeight = canvas.height;
                         drawWidth = userImg.width * (canvas.height / userImg.height);
@@ -295,26 +310,22 @@
                         drawY = (canvas.height - drawHeight) / 2;
                     }
 
-                    // 繪製合成
+                    // 繪製與合成
                     ctx.clearRect(0, 0, canvas.width, canvas.height);
-                    
-                    // 1. 先畫賓客照片
                     ctx.drawImage(userImg, drawX, drawY, drawWidth, drawHeight);
-                    
-                    // 2. 再疊上婚禮相框
                     ctx.drawImage(frameImage, 0, 0, canvas.width, canvas.height);
 
-                    // 輸出高畫質圖片
-                    resultImage.src = canvas.toDataURL('image/jpeg', 0.9);
+                    // 輸出高畫質 JPEG
+                    resultImage.src = canvas.toToDataURL ? canvas.toDataURL('image/jpeg', 0.9) : canvas.toDataURL('image/jpeg', 0.9);
                     resultArea.style.display = 'block';
                     
-                    // 恢復上傳文字狀態
+                    // 恢復上傳控制區文字
                     placeholderText.innerHTML = `
-                        <svg viewBox="0 0 24 24"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"/></svg>
-                        <div class="placeholder-text">重新更換照片</div>
+                        <svg viewBox="0 0 24 24"><path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/></svg>
+                        <div class="placeholder-text">RETAKE / CHOOSE ANOTHER</div>
                     `;
                     
-                    // 平滑滾動到成品畫面
+                    // 平滑滾動至成品
                     setTimeout(() => {
                         resultArea.scrollIntoView({ behavior: 'smooth' });
                     }, 100);
