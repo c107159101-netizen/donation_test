@@ -6,16 +6,16 @@
     <title>David & Hailey's Wedding Photo Booth</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Noto+Serif+TC:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Noto+Serif+TC:wght@300;400;500&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --text-main: #1a1a1a;         /* 極簡深碳黑 */
-            --text-muted: #757575;        /* 質感冷灰色 */
-            --bg-color: #fcfcfc;          /* 畫廊冷調淡灰白底 */
-            --card-bg: #ffffff;
-            --accent-dark: #000000;       /* 純黑主題色 */
-            --accent-light: #f5f5f5;
+            --bg-color: #000000;          /* 全黑背景 */
+            --card-bg: #000000;           /* 卡片全黑 */
+            --text-main: #fcfaf2;         /* 高級質感奶油白 */
+            --text-muted: #d4cfc5;        /* 柔和霧面奶油白 */
+            --accent-border: #333333;     /* 暗色極簡邊框 */
+            --upload-bg: #121212;         /* 微亮深灰上傳區 */
         }
 
         * {
@@ -39,20 +39,23 @@
         /* 標頭設計 */
         header {
             text-align: center;
-            margin-bottom: 40px;
+            margin-bottom: 35px;
             max-width: 440px;
             width: 100%;
         }
 
+        /* 模擬 Brasilia Delight Script 的奢華優雅流線感 */
         .wedding-title-en {
             font-family: 'Cormorant Garamond', serif;
-            font-size: 2.6rem;
+            font-size: 3.2rem;
             font-weight: 300;
             font-style: italic;
-            line-height: 1.1;
-            margin: 0 0 8px 0;
-            color: var(--accent-dark);
-            letter-spacing: 0.02em;
+            line-height: 1.2;
+            margin: 0 0 12px 0;
+            color: var(--text-main);
+            letter-spacing: 0.01em;
+            /* 加入微弱的光暈，呈現燙金與精緻手寫感 */
+            text-shadow: 0 0 1px rgba(252, 250, 242, 0.2); 
         }
 
         .wedding-names-zh {
@@ -61,13 +64,13 @@
             color: var(--text-muted);
             margin: 0 0 30px 0;
             letter-spacing: 0.3em;
-            text-indent: 0.3em; /* 讓字體居中對齊更完美 */
+            text-indent: 0.3em;
         }
 
-        /* 畫廊風極簡經文排版 */
+        /* 極簡黑白畫廊風經文排版 */
         .verse-container {
-            border-top: 1px solid #e0e0e0;
-            border-bottom: 1px solid #e0e0e0;
+            border-top: 1px solid var(--accent-border);
+            border-bottom: 1px solid var(--accent-border);
             padding: 24px 10px;
             margin-bottom: 35px;
             text-align: center;
@@ -76,7 +79,7 @@
         .verse-zh {
             font-size: 0.95rem;
             line-height: 1.8;
-            margin: 0 0 12px 0;
+            margin: 0 0 14px 0;
             font-weight: 400;
             color: var(--text-main);
             letter-spacing: 0.1em;
@@ -104,19 +107,18 @@
             background-color: var(--card-bg);
             width: 100%;
             max-width: 440px;
-            border-radius: 0px; /* 經典極簡直角 */
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.04);
+            border-radius: 0px;
             padding: 24px;
-            margin-bottom: 50px;
-            border: 1px solid #eeeeee;
+            margin-bottom: 30px;
+            border: 1px solid var(--accent-border);
         }
 
         /* 上傳區域 (4:3 比例) */
         .upload-zone {
             width: 100%;
             aspect-ratio: 4 / 3;
-            background-color: var(--accent-light);
-            border: 1px dashed #cccccc;
+            background-color: var(--upload-bg);
+            border: 1px dashed #444444;
             border-radius: 0px;
             display: flex;
             justify-content: center;
@@ -128,7 +130,7 @@
         }
 
         .upload-zone:active {
-            background-color: #eaeaea;
+            background-color: #1a1a1a;
             transform: scale(0.99);
         }
 
@@ -138,8 +140,8 @@
         }
 
         .placeholder-content svg {
-            width: 24px;
-            height: 24px;
+            width: 26px;
+            height: 26px;
             fill: var(--text-main);
             margin-bottom: 14px;
             font-weight: 300;
@@ -150,6 +152,7 @@
             font-weight: 400;
             letter-spacing: 0.15em;
             text-transform: uppercase;
+            color: var(--text-muted);
         }
 
         #fileInput {
@@ -161,7 +164,7 @@
             display: none;
             margin-top: 24px;
             text-align: center;
-            border-top: 1px solid #eeeeee;
+            border-top: 1px solid var(--accent-border);
             padding-top: 24px;
             animation: fadeIn 0.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
         }
@@ -182,7 +185,7 @@
         #resultImage {
             width: 100%;
             border-radius: 0px;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 8px 30px rgba(255, 255, 255, 0.05);
         }
 
         .save-tip {
@@ -193,26 +196,10 @@
             letter-spacing: 0.05em;
         }
 
-        /* 網頁最下方插圖區域 */
-        .illustration-footer {
-            width: 100%;
-            max-width: 440px;
-            margin-top: 10px;
-            text-align: center;
-        }
-
-        .illustration-footer img {
-            width: 100%;
-            height: auto;
-            border-radius: 0px;
-            border: 1px solid #eeeeee;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02);
-        }
-
         /* 頁尾資訊 */
         footer {
             margin-top: auto;
-            padding-top: 50px;
+            padding-top: 40px;
             font-family: 'Cormorant Garamond', serif;
             font-size: 0.85rem;
             font-style: italic;
@@ -254,10 +241,6 @@
             <img id="resultImage" alt="Wedding Photo">
             <div class="save-tip">長按上方圖片即可儲存至手機</div>
         </div>
-    </div>
-
-    <div class="illustration-footer">
-        <img src="image_bd0b81.png" alt="Wedding Illustration">
     </div>
 
     <footer>
@@ -316,7 +299,7 @@
                     ctx.drawImage(frameImage, 0, 0, canvas.width, canvas.height);
 
                     // 輸出高畫質 JPEG
-                    resultImage.src = canvas.toToDataURL ? canvas.toDataURL('image/jpeg', 0.9) : canvas.toDataURL('image/jpeg', 0.9);
+                    resultImage.src = canvas.toDataURL('image/jpeg', 0.9);
                     resultArea.style.display = 'block';
                     
                     // 恢復上傳控制區文字
