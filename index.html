@@ -6,7 +6,7 @@
     <title>David & Hailey's Wedding Photo Booth</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Noto+Serif+TC:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,400&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
     
     <style>
         :root {
@@ -24,7 +24,7 @@
         }
 
         body {
-            font-family: 'Cormorant Garamond', 'Noto Serif TC', serif;
+            font-family: 'JetBrains Mono', 'Noto Sans TC', sans-serif;
             background-color: var(--bg-color);
             margin: 0;
             padding: 50px 24px;
@@ -33,7 +33,7 @@
             align-items: center;
             color: var(--text-main);
             min-height: 100vh;
-            letter-spacing: 0.08em;
+            letter-spacing: 0.05em;
         }
 
         /* 標頭設計 */
@@ -45,59 +45,51 @@
         }
 
         .wedding-title-en {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 3.2rem;
-            font-weight: 300;
-            font-style: italic;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 2.4rem;
+            font-weight: 400;
             line-height: 1.2;
             margin: 0 0 12px 0;
             color: var(--text-main);
-            letter-spacing: 0.01em;
-            text-shadow: 0 0 1px rgba(252, 250, 242, 0.2); 
+            letter-spacing: -0.02em;
         }
 
         .wedding-names-zh {
-            font-size: 1.1rem;
+            font-family: 'Noto Sans TC', sans-serif;
+            font-size: 1.05rem;
             font-weight: 400;
             color: var(--text-muted);
             margin: 0 0 30px 0;
-            letter-spacing: 0.3em;
-            text-indent: 0.3em;
+            letter-spacing: 0.2em;
+            text-indent: 0.2em;
         }
 
-        /* 奶油白極簡線條經文區塊 */
-        .verse-container {
+        /* 專屬歡迎詞區塊 */
+        .welcome-container {
             border-top: 1px solid var(--accent-border);
             border-bottom: 1px solid var(--accent-border);
-            padding: 24px 10px;
+            padding: 26px 15px;
             margin-bottom: 35px;
             text-align: center;
         }
 
-        .verse-zh {
-            font-size: 0.95rem;
-            line-height: 1.8;
-            margin: 0 0 14px 0;
-            font-weight: 400;
+        .welcome-text-top {
+            font-family: 'Noto Sans TC', sans-serif;
+            font-size: 1rem;
+            line-height: 1.6;
+            margin: 0 0 10px 0;
+            font-weight: 500;
             color: var(--text-main);
-            letter-spacing: 0.1em;
+            letter-spacing: 0.08em;
         }
 
-        .verse-en {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.05rem;
-            line-height: 1.5;
-            margin: 0 0 6px 0;
+        .welcome-text-bottom {
+            font-family: 'Noto Sans TC', sans-serif;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin: 0;
             color: var(--text-muted);
-            font-style: italic;
-        }
-
-        .verse-ref {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.15em;
-            display: block;
+            letter-spacing: 0.05em;
         }
 
         /* 主工作卡片 */
@@ -142,14 +134,13 @@
             height: 26px;
             fill: var(--text-main);
             margin-bottom: 14px;
-            font-weight: 300;
         }
 
         .placeholder-text {
-            font-size: 0.85rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
             font-weight: 400;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
+            letter-spacing: 0.1em;
             color: var(--text-muted);
         }
 
@@ -173,11 +164,12 @@
         }
 
         .result-title {
-            font-size: 0.85rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
             color: var(--text-main);
             margin-bottom: 18px;
-            font-weight: 500;
-            letter-spacing: 0.2em;
+            font-weight: 400;
+            letter-spacing: 0.15em;
         }
 
         #resultImage {
@@ -187,6 +179,7 @@
         }
 
         .save-tip {
+            font-family: 'Noto Sans TC', sans-serif;
             margin-top: 16px;
             font-size: 0.8rem;
             color: var(--text-muted);
@@ -198,12 +191,11 @@
         footer {
             margin-top: auto;
             padding-top: 40px;
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 0.85rem;
-            font-style: italic;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
             color: var(--text-muted);
             text-align: center;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.02em;
         }
 
         /* 隱藏的畫布 */
@@ -218,10 +210,9 @@
         <h1 class="wedding-title-en">David & Hailey</h1>
         <div class="wedding-names-zh">洪承緯 <span>|</span> 劉書念</div>
         
-        <div class="verse-container">
-            <p class="verse-zh">兩個人比一個人好，<br>因為一起辛勤工作，共享美好的收穫。</p>
-            <p class="verse-en">Two are better than one because they have a good reward for their hard work.</p>
-            <span class="verse-ref">— Ecclesiastes 4:9</span>
+        <div class="welcome-container">
+            <p class="welcome-text-top">謝謝你們成為我們故事的一部分</p>
+            <p class="welcome-text-bottom">歡迎上傳/拍攝製作婚禮專屬拍貼</p>
         </div>
     </header>
 
@@ -235,7 +226,7 @@
         <input type="file" id="fileInput" accept="image/*">
 
         <div class="result-zone" id="resultArea">
-            <div class="result-title">✦ THANK YOU FOR BEING WITH US ✦</div>
+            <div class="result-title">THANK YOU FOR BEING WITH US</div>
             <img id="resultImage" alt="Wedding Photo">
             <div class="save-tip">長按上方圖片即可儲存至手機</div>
         </div>
@@ -269,7 +260,6 @@
                 const userImg = new Image();
                 userImg.onload = function() {
                     
-                    // 建立高清晰度 4:3 畫布
                     canvas.width = 1440; 
                     canvas.height = 1080;
 
@@ -277,35 +267,26 @@
                     const imgRatio = userImg.width / userImg.height;
                     let drawWidth, drawHeight, drawX, drawY;
 
-                    // 最佳化最大化塞滿演算法 (加成放大系數，微調緊貼紅色框內部)
+                    // 最大化塞滿演算法
                     if (imgRatio > canvasRatio) {
-                        // 橫照：以寬度填滿為基準，並額外放大 1.06 倍使兩側和上下貼近紅色框
                         drawWidth = canvas.width * 1.06;
                         drawHeight = drawWidth / imgRatio;
                     } else {
-                        // 直照或方照：以高度填滿為基準，額外放大 1.08 倍最大化塞入
                         drawHeight = canvas.height * 1.08;
                         drawWidth = drawHeight * imgRatio;
                     }
                     
-                    // 置中計算
                     drawX = (canvas.width - drawWidth) / 2;
                     drawY = (canvas.height - drawHeight) / 2;
 
-                    // 繪製與合成
                     ctx.clearRect(0, 0, canvas.width, canvas.height);
                     
-                    // 背景填滿純黑
                     ctx.fillStyle = '#000000';
                     ctx.fillRect(0, 0, canvas.width, canvas.height);
                     
-                    // 1. 先繪製最大化後的原圖照片（底層）
                     ctx.drawImage(userImg, drawX, drawY, drawWidth, drawHeight);
-                    
-                    // 2. 疊上婚禮相框（頂層）
                     ctx.drawImage(frameImage, 0, 0, canvas.width, canvas.height);
 
-                    // 輸出高畫質 JPEG
                     resultImage.src = canvas.toDataURL('image/jpeg', 0.9);
                     resultArea.style.display = 'block';
                     
