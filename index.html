@@ -2,7 +2,7 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>David & Hailey's Wedding Photo Booth</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -23,25 +23,20 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        html, body {
+        body {
             background-color: var(--bg-color);
             margin: 0;
-            padding: 0;
-            width: 100%;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        body {
             padding: 40px 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
             color: var(--text-main);
+            min-height: 100vh;
             letter-spacing: 0.05em;
             font-family: 'JetBrains Mono', 'Noto Sans TC', sans-serif !important;
         }
 
+        /* 標頭設計 */
         header {
             text-align: center;
             margin-bottom: 30px;
@@ -69,6 +64,7 @@
             text-indent: 0.2em;
         }
 
+        /* 專屬歡迎詞區塊 */
         .welcome-container {
             border-top: 1px solid var(--accent-border);
             border-bottom: 1px solid var(--accent-border);
@@ -96,6 +92,7 @@
             letter-spacing: 0.05em;
         }
 
+        /* 主工作卡片 */
         .main-card {
             background-color: var(--card-bg);
             width: 100%;
@@ -106,38 +103,25 @@
             border: 1px solid var(--accent-border);
         }
 
-        /* 拍貼互動容器 */
-        .booth-container {
+        /* 上傳區域 (完美對應 iPhone 相機 4:3 比例) */
+        .upload-zone {
             width: 100%;
             aspect-ratio: 4 / 3;
-            position: relative;
             background-color: var(--upload-bg);
             border: 1px dashed #444444;
-            overflow: hidden;
-            touch-action: none;           /* 阻止所有預設瀏覽器滑動手勢 */
-        }
-
-        #interactiveCanvas {
-            width: 100%;
-            height: 100%;
-            display: block;
-            cursor: grab;
-            touch-action: none;           /* 阻止畫布的預設縮放與滾動 */
-        }
-        #interactiveCanvas:active {
-            cursor: grabbing;
-        }
-
-        /* 點擊上傳覆蓋層 */
-        .upload-overlay {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
+            border-radius: 0px;
             display: flex;
             justify-content: center;
             align-items: center;
             cursor: pointer;
-            z-index: 10;
-            background-color: var(--upload-bg);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .upload-zone:active {
+            background-color: #1a1a1a;
+            transform: scale(0.99);
         }
 
         .placeholder-content {
@@ -164,33 +148,10 @@
             display: none;
         }
 
-        /* 控制按鈕區 */
-        .control-btns {
-            display: none;
-            margin-top: 15px;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-        }
-
-        .btn {
-            background: transparent;
-            border: 1px solid var(--text-muted);
-            color: var(--text-main);
-            padding: 12px;
-            font-size: 0.85rem;
-            cursor: pointer;
-            letter-spacing: 0.1em;
-            font-family: 'Noto Sans TC', sans-serif !important;
-            transition: all 0.2s ease;
-        }
-        .btn:active {
-            background: #222;
-        }
-
-        /* 最終合成導出區 */
+        /* 結果展示區 */
         .result-zone {
             display: none;
-            margin-top: 25px;
+            margin-top: 20px;
             text-align: center;
             border-top: 1px solid var(--accent-border);
             padding-top: 20px;
@@ -213,6 +174,7 @@
 
         #resultImage {
             width: 100%;
+            border-radius: 0px;
             box-shadow: 0 8px 30px rgba(255, 255, 255, 0.05);
         }
 
@@ -234,6 +196,10 @@
             text-align: center;
             letter-spacing: 0.02em;
         }
+
+        canvas {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -249,27 +215,18 @@
     </header>
 
     <div class="main-card">
-        <div class="booth-container">
-            <div class="upload-overlay" id="uploadOverlay" onclick="document.getElementById('fileInput').click()">
-                <div class="placeholder-content">
-                    <svg viewBox="0 0 24 24"><path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/></svg>
-                    <div class="placeholder-text">TAKE A PHOTO / UPLOAD</div>
-                </div>
+        <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
+            <div class="placeholder-content" id="placeholderText">
+                <svg viewBox="0 0 24 24"><path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/></svg>
+                <div class="placeholder-text">TAKE A PHOTO / UPLOAD</div>
             </div>
-            <canvas id="interactiveCanvas" width="1440" height="1080"></canvas>
         </div>
-        
         <input type="file" id="fileInput" accept="image/*">
-
-        <div class="control-btns" id="controlBtns">
-            <button class="btn" onclick="resetBooth()">重新拍照/上傳</button>
-            <button class="btn" style="border-color: #fcfaf2;" onclick="generateFinalImage()">確認完成，導出圖片</button>
-        </div>
 
         <div class="result-zone" id="resultArea">
             <div class="result-title">THANK YOU FOR BEING WITH US</div>
             <img id="resultImage" alt="Wedding Photo">
-            <div class="save-tip">✦ 長按上方圖片即可儲存至手機 ✦</div>
+            <div class="save-tip">長按上方圖片即可儲存至手機</div>
         </div>
     </div>
 
@@ -277,196 +234,83 @@
         Thank you for being a part of our story.
     </footer>
 
+    <canvas id="canvas"></canvas>
+
     <script>
         const fileInput = document.getElementById('fileInput');
-        const uploadOverlay = document.getElementById('uploadOverlay');
-        const controlBtns = document.getElementById('controlBtns');
         const resultArea = document.getElementById('resultArea');
         const resultImage = document.getElementById('resultImage');
-        
-        const canvas = document.getElementById('interactiveCanvas');
+        const placeholderText = document.getElementById('placeholderText');
+        const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
 
-        // 載入相框
         const frameImage = new Image();
         frameImage.src = '框.png'; 
-        frameImage.onload = () => { if(!userImg.src) drawStatic(); };
-
-        let userImg = new Image();
-        
-        // 變數控制
-        let imgScale = 1.0;
-        let imgX = 0;
-        let imgY = 0;
-        
-        let isDragging = false;
-        let startX, startY;
-        let startPinchDist = 0;
-        let startScale = 1.0;
-
-        function drawStatic() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = '#121212';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            if (frameImage.complete) {
-                ctx.drawImage(frameImage, 0, 0, canvas.width, canvas.height);
-            }
-        }
-
-        function draw() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = '#000000';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            if (userImg.src) {
-                ctx.save();
-                ctx.translate(canvas.width / 2 + imgX, canvas.height / 2 + imgY);
-                ctx.scale(imgScale, imgScale);
-                ctx.drawImage(userImg, -userImg.width / 2, -userImg.height / 2);
-                ctx.restore();
-            }
-
-            if (frameImage.complete) {
-                ctx.drawImage(frameImage, 0, 0, canvas.width, canvas.height);
-            }
-        }
-
-        function resetBooth() {
-            userImg = new Image();
-            imgScale = 1.0;
-            imgX = 0;
-            imgY = 0;
-            drawStatic();
-            uploadOverlay.style.display = 'flex';
-            controlBtns.style.display = 'none';
-            resultArea.style.display = 'none';
-            fileInput.value = ''; // 清空選擇
-            document.getElementById('fileInput').click();
-        }
 
         fileInput.addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (!file) return;
 
-            uploadOverlay.style.display = 'none';
-            controlBtns.style.display = 'grid';
-            resultArea.style.display = 'none';
+            placeholderText.innerHTML = '<div class="placeholder-text">PROCESSING...</div>';
 
             const reader = new FileReader();
             reader.onload = function(event) {
-                userImg = new Image();
+                const userImg = new Image();
                 userImg.onload = function() {
+                    
+                    // 設定高畫質 4:3 輸出解析度
+                    canvas.width = 1440; 
+                    canvas.height = 1080;
+
                     const canvasRatio = canvas.width / canvas.height;
                     const imgRatio = userImg.width / userImg.height;
+                    let drawWidth, drawHeight, drawX, drawY;
 
+                    // iPhone 智慧型無損 Contain 演算法：智慧辨識 16:9 / 4:3 / 方形
                     if (imgRatio > canvasRatio) {
-                        imgScale = (canvas.width * 1.06) / userImg.width;
+                        // 橫式照片：以寬度塞滿，高度依比例縮放
+                        drawWidth = canvas.width;
+                        drawHeight = canvas.width / imgRatio;
                     } else {
-                        imgScale = (canvas.height * 1.08) / userImg.height;
+                        // 直式照片 (iPhone 16:9 或 4:3 直拍)：以高度塞滿，寬度依比例縮放
+                        drawHeight = canvas.height;
+                        drawWidth = canvas.height * imgRatio;
                     }
                     
-                    imgX = 0;
-                    imgY = 0;
-                    draw();
+                    // 精準水平與垂直置中，完美保留原圖不切邊
+                    drawX = (canvas.width - drawWidth) / 2;
+                    drawY = (canvas.height - drawHeight) / 2;
+
+                    // 清空畫布
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    
+                    // 背景打底為極致純黑（讓未滿版邊緣無縫融入網頁）
+                    ctx.fillStyle = '#000000';
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    
+                    // 1. 先繪製不裁切的原圖照片
+                    ctx.drawImage(userImg, drawX, drawY, drawWidth, drawHeight);
+                    
+                    // 2. 疊上紅色婚禮邊框
+                    ctx.drawImage(frameImage, 0, 0, canvas.width, canvas.height);
+
+                    // 輸出高畫質 JPEG
+                    resultImage.src = canvas.toDataURL('image/jpeg', 0.9);
+                    resultArea.style.display = 'block';
+                    
+                    placeholderText.innerHTML = `
+                        <svg viewBox="0 0 24 24"><path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/></svg>
+                        <div class="placeholder-text">RETAKE / CHOOSE ANOTHER</div>
+                    `;
+                    
+                    setTimeout(() => {
+                        resultArea.scrollIntoView({ behavior: 'smooth' });
+                    }, 100);
                 };
                 userImg.src = event.target.result;
             };
             reader.readAsDataURL(file);
         });
-
-        // 網頁座標轉換
-        function getCanvasPoint(e) {
-            const rect = canvas.getBoundingClientRect();
-            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-            return {
-                x: (clientX - rect.left) * (canvas.width / rect.width),
-                y: (clientY - rect.top) * (canvas.height / rect.height)
-            };
-        }
-
-        function getPinchDist(e) {
-            if (e.touches.length < 2) return 0;
-            const dx = e.touches[0].clientX - e.touches[1].clientX;
-            const dy = e.touches[0].clientY - e.touches[1].clientY;
-            return Math.sqrt(dx * dx + dy * dy);
-        }
-
-        function handleStart(e) {
-            if (!userImg.src) return;
-            
-            // 強制防止 iPhone 網頁橡皮筋滾動效應與多指縮放
-            if(e.cancelable) e.preventDefault(); 
-            
-            if (e.touches && e.touches.length === 2) {
-                isDragging = false;
-                startPinchDist = getPinchDist(e);
-                startScale = imgScale;
-            } else {
-                isDragging = true;
-                const p = getCanvasPoint(e);
-                startX = p.x - imgX;
-                startY = p.y - imgY;
-            }
-        }
-
-        function handleMove(e) {
-            if (!userImg.src) return;
-            if(e.cancelable) e.preventDefault(); // 核心：鎖定手機網頁背景
-
-            if (e.touches && e.touches.length === 2) {
-                const dist = getPinchDist(e);
-                if (dist > 0 && startPinchDist > 0) {
-                    imgScale = startScale * (dist / startPinchDist);
-                    if(imgScale < 0.1) imgScale = 0.1;
-                    if(imgScale > 5.0) imgScale = 5.0;
-                    draw();
-                }
-            } else if (isDragging) {
-                const p = getCanvasPoint(e);
-                imgX = p.x - startX;
-                imgY = p.y - startY;
-                draw();
-            }
-        }
-
-        function handleEnd(e) {
-            if(e.cancelable) e.preventDefault();
-            isDragging = false;
-        }
-
-        // 電腦版滾輪支援
-        canvas.addEventListener('wheel', function(e) {
-            if (!userImg.src) return;
-            e.preventDefault();
-            if (e.deltaY < 0) imgScale *= 1.05;
-            else imgScale /= 1.05;
-            if(imgScale < 0.1) imgScale = 0.1;
-            if(imgScale > 5.0) imgScale = 5.0;
-            draw();
-        }, { passive: false });
-
-        // 精準綁定事件並設為不被 passive 阻擋
-        canvas.addEventListener('touchstart', handleStart, { passive: false });
-        canvas.addEventListener('touchmove', handleMove, { passive: false });
-        canvas.addEventListener('touchend', handleEnd, { passive: false });
-
-        canvas.addEventListener('mousedown', handleStart);
-        canvas.addEventListener('mousemove', handleMove);
-        canvas.addEventListener('mouseup', handleEnd);
-        canvas.addEventListener('mouseleave', handleEnd);
-
-        // 導出圖片
-        function generateFinalImage() {
-            if (!userImg.src) return;
-            
-            resultImage.src = canvas.toDataURL('image/jpeg', 0.93);
-            resultArea.style.display = 'block';
-            
-            setTimeout(() => {
-                resultArea.scrollIntoView({ behavior: 'smooth' });
-            }, 150);
-        }
     </script>
 </body>
 </html>
