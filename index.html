@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>David & Hailey's Wedding Photo Booth</title>
+    <!-- 引入 Noto Sans TC (中文) 與 JetBrains Mono (英文) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
@@ -164,6 +165,17 @@
             display: none;
         }
 
+        /* 調整提示文字 */
+        .adjust-tip {
+            display: none;
+            text-align: center;
+            margin-top: 10px;
+            font-size: 0.85rem;
+            color: var(--text-main);
+            font-family: 'Noto Sans TC', sans-serif !important;
+            letter-spacing: 0.05em;
+        }
+
         /* 控制按鈕區 */
         .control-btns {
             display: none;
@@ -261,6 +273,9 @@
         
         <input type="file" id="fileInput" accept="image/*">
 
+        <!-- 調整提示文字 -->
+        <div class="adjust-tip" id="adjustTip">✧ 可手動拖曳、放大調整照片 ✧</div>
+
         <div class="control-btns" id="controlBtns">
             <button class="btn" onclick="resetBooth()">重新拍照/上傳</button>
             <button class="btn" style="border-color: #fcfaf2;" onclick="generateFinalImage()">確認完成，導出圖片</button>
@@ -277,9 +292,12 @@
         Thank you for being a part of our story.
     </footer>
 
+    <canvas id="canvas"></canvas>
+
     <script>
         const fileInput = document.getElementById('fileInput');
         const uploadOverlay = document.getElementById('uploadOverlay');
+        const adjustTip = document.getElementById('adjustTip');
         const controlBtns = document.getElementById('controlBtns');
         const resultArea = document.getElementById('resultArea');
         const resultImage = document.getElementById('resultImage');
@@ -320,8 +338,11 @@
 
             if (userImg.src) {
                 ctx.save();
+                // 移至畫布中心加上使用者拖曳的位移
                 ctx.translate(canvas.width / 2 + imgX, canvas.height / 2 + imgY);
+                // 僅套用縮放，不套用鏡像翻轉
                 ctx.scale(imgScale, imgScale);
+                // 繪製圖片，中心點對齊 translate 點
                 ctx.drawImage(userImg, -userImg.width / 2, -userImg.height / 2);
                 ctx.restore();
             }
@@ -338,6 +359,7 @@
             imgY = 0;
             drawStatic();
             uploadOverlay.style.display = 'flex';
+            adjustTip.style.display = 'none';
             controlBtns.style.display = 'none';
             resultArea.style.display = 'none';
             fileInput.value = ''; // 清空選擇
@@ -349,6 +371,7 @@
             if (!file) return;
 
             uploadOverlay.style.display = 'none';
+            adjustTip.style.display = 'block'; // 顯示調整提示
             controlBtns.style.display = 'grid';
             resultArea.style.display = 'none';
 
